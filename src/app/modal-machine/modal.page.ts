@@ -1,104 +1,59 @@
-import { Component } from '@angular/core';
-import {AngularFirestore} from "@angular/fire/firestore";
-import {FormBuilder} from '@angular/forms';
-import {
-  LoadingController,
-  NavController,
-  ToastController,
-  AlertController,
-  ActionSheetController
-} from '@ionic/angular';
-import {Machine} from "../models/machines.model";
-import firebase from "firebase";
-import {Camera, CameraOptions} from "@ionic-native/camera/ngx";
-import {AngularFireStorage} from "@angular/fire/storage";
+import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+
+import { AngularFireStorage } from '@angular/fire/storage';
+import { LoadingController, AlertController } from '@ionic/angular';
+
+import { Observable } from 'rxjs';
 import {AngularFireDatabase} from "@angular/fire/database";
+import firebase from "firebase";
+
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  selector: 'app-modal',
+  templateUrl: './modal.page.html',
+  styleUrls: ['./modal.page.scss'],
 })
-export class Tab2Page {
-  machine = {} as Machine;
-  imagePath;
-  image;
+
+@NgModule({
+  imports:      [ CommonModule ],
+})
+
+export class ModalPage implements OnInit {
   machine_send;
+  image;
+  images = [];
+  imagePath: string;
   upload: any;
-  del: any;
+  del: any; //delete image
+  items: Observable<any[]>;
   file;
-  image_ad:any;
-  AjoutMachine = this.formBuilder.group({
-    type: [''],
-    fabriquant: [''],
-    model: [''],
-    etat: [''],
-    prixachete: [''],
-    problem: [''],
-    dateAte: [''],
-    nom: ['']
-  })
 
-  constructor(private formBuilder: FormBuilder,
-              private toastCtrl: ToastController,
-              private loadingCtrl: LoadingController,
-              private alertCtrl: AlertController,
-              private firestore: AngularFirestore,
-              public afSG: AngularFireStorage,
-              public afDB: AngularFireDatabase,
-              private camera: Camera,
-              public actionSheetCtlr: ActionSheetController,
-              private navCtrl: NavController
-              ) {}
+  constructor(
+    public modalController: ModalController,
+    public loadingController: LoadingController,
+    public alertController: AlertController,
+    public afSG: AngularFireStorage,
+    public afDB: AngularFireDatabase,
+    private camera: Camera,
+    public actionSheetCtlr: ActionSheetController,
 
-  ngOnIni(){
+  ) {}
 
+  ngOnInit() {
+    this.getImagesStorageMachine();
   }
 
-  ionViewWillEnter(){
-    this.AjoutMachine.reset();
+  dismiss() {
+    this.modalController.dismiss({
+      'dismissed': true
+    });
   }
-
-  showToast(message: string) {
-    this.toastCtrl.create({
-      message: message,
-      duration: 3000
-    }).then(toastData => toastData.present());
-  }
-  convert(new_form) {
-    let new_machine = {} as Machine;
-    new_machine.type = new_form.type;
-    new_machine.nom = new_form.nom;
-    new_machine.model = new_form.model;
-    new_machine.fabriquant = new_form.fabriquant;
-    new_machine.etat = new_form.etat;
-    new_machine.date_atelier = new_form.dateAte;
-    new_machine.prix_achete = new_form.prixachete;
-    new_machine.problem = new_form.problem;
-
-    return new_machine;
-  }
-
-  async submit() {
-
-      this.machine = this.convert(this.AjoutMachine.value);
-      let loader = await this.loadingCtrl.create({
-        message: "Please wait..."
-      });
-      await loader.present();
-
-      try {
-        await this.firestore.collection("machines").add(this.machine);
-      } catch (e) {
-        this.showToast(e);
-      }
-      this.AjoutMachine.reset();
-
-      await loader.dismiss();
-
-      await this.navCtrl.navigateRoot('home');
-
-    }
 
   async addPhoto(source: string) {
     if (source === 'library') {
@@ -112,7 +67,7 @@ export class Tab2Page {
       this.image = 'data:image/jpg;base64,' + cameraImage;
       console.log("addPhoto : this.image.id = " + this.image.id);
     }
-    await this.presentAlertConfirm();
+    this.presentAlertConfirm();
   }
 
   async openCamera() {
@@ -140,36 +95,42 @@ export class Tab2Page {
     };
     return await this.camera.getPicture(options);
   }
+
   async uploadFirebase() {
-    const loading = await this.loadingCtrl.create();
+    const loading = await this.loadingController.create();
     await loading.present();
     this.imagePath = this.machine_send.id +'/' + new Date().getTime() + '.jpg';
     this.upload = this.afSG.ref(this.imagePath).putString(this.image, 'data_url');
 
     this.upload.then(async () => {
       await loading.dismiss();
-      const alert = await this.alertCtrl.create({
+      const alert = await this.alertController.create({
         header: 'Upload réussi !',
         message: 'L\'envoi de la photo dans Firebase est terminé!',
         buttons: ['OK']
       });
       await alert.present();
+      this.getImagesStorageMachine();
+
     });
   }
-  getImagesStorageMachine(){
-    let storage = firebase.storage();
-    let  listRef = storage.ref().child(this.machine.id);
+
+  getImagesStorageMachine() {
+    var storage = firebase.storage();
+    var listRef = storage.ref().child(this.machine_send.id);
     listRef.listAll()
       .then((res) => {
         res.items.forEach((itemRef) => {
           this.afSG.ref(itemRef.fullPath).getDownloadURL().subscribe(imgUrl => {
             console.log('this.afSG.ref(itemRef.fullPath) : ' , this.afSG.ref(itemRef.fullPath));
-            this.image.push(imgUrl);
+            this.images.push(imgUrl);
           });
         })
-        console.log('this.images = ',this.image);
+        console.log('this.images = ',this.images);
       });
   }
+
+
   async presentActionSheet() {
     const actionSheet = await this.actionSheetCtlr.create({
       header: 'Ajouter une photo',
@@ -207,10 +168,10 @@ export class Tab2Page {
   }
 
   async presentAlertConfirm() {
-    const alert = await this.alertCtrl.create({
+    const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Voulez-vous ajouter cette photo ? ',
-      message:`<img src="${this.image}" alt="g-maps" style="border-radius: 2px">`,
+      message: `<img src="${this.image}" alt="g-maps" style="border-radius: 2px">`,
       buttons: [
         {
           text: 'Annuler',
@@ -221,13 +182,67 @@ export class Tab2Page {
           }
         }, {
           text: 'Ajouter',
-          handler: async () => {
+          handler: () => {
             console.log('Confirm Ajouter');
-            await this.submit();
+            this.uploadFirebase();
           }
         }
       ]
     });
     await alert.present();
+  }
+
+  async presentAlertDelete(i) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Voulez-vous supprimer cette photo ? ',
+      buttons: [
+        {
+          text: 'Annuler',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Annuler');
+          }
+        }, {
+          text: 'Delete',
+          role: 'destructive',
+          cssClass: 'primary',
+          handler: () => {
+            this.deleteImg(i);
+            console.log('i dans presentAlertDelete(i) : ', i);
+            console.log('Delete clicked');
+          }
+        },
+      ]
+    });
+    await alert.present();
+  }
+
+  async deleteImg(i): Promise<void> {
+    const loading = await this.loadingController.create();
+    await loading.present();
+    this.del = this.afSG.storage.refFromURL(this.images[i]).delete();
+    if (i > -1) {
+      this.images.splice(i, 1);
+    }
+    this.del.then(async () => {
+      await loading.dismiss();
+      const alert = await this.alertController.create({
+        header: 'Suppression réussi !',
+        message: 'La photo a bien été supprimée dans Firebase.',
+        buttons: ['OK']
+      });
+      await alert.present();
+    });
+  }
+
+  doRefresh(event) {
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);
   }
 }

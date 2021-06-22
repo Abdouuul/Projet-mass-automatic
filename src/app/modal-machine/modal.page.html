@@ -1,0 +1,57 @@
+<ion-content class="ion-padding" >
+
+  <ion-list lines="none">
+
+    <ion-card>
+      <img src="../assets/{{chantier_send.img_ad}}" />
+      <ion-card-header>
+        <ion-card-subtitle>Chantier :</ion-card-subtitle>
+        <ion-card-title> {{chantier_send.name}}</ion-card-title>
+      </ion-card-header>
+
+      <ion-item>
+        <ion-icon name="hammer-outline" slot="start"></ion-icon>
+        <ion-label>{{chantier_send.type}}</ion-label>
+
+      </ion-item>
+      <ion-item>
+        <ion-icon name="pin" slot="start"></ion-icon>
+        <ion-label>{{chantier_send.adresse}} {{chantier_send.zipcode}} - {{chantier_send.city}}</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="calendar" slot="start"></ion-icon>
+        <ion-label>{{chantier_send.date.toDate() | date: 'dd/MM/YYYY' }} </ion-label>
+      </ion-item>
+    </ion-card>
+
+    <ion-card >
+      <ion-card-content>
+        <ion-card-title>
+          Description
+        </ion-card-title>
+        <p>
+          {{chantier_send.desc}}
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <div class="flex">
+    <ion-card class="img" *ngFor="let image of images ; let i = index" [attr.data-index]="i">
+      <ion-img (click)="presentAlertDelete(i)" [src]="image"></ion-img >
+    </ion-card>
+  </div>
+
+  <ion-button (click)="presentActionSheet()" expand="block" color="warning">
+    <ion-icon slot="start" name="camera"></ion-icon>
+    Ajouter une photo
+  </ion-button>
+
+  <br>
+  <ion-button expand="block" color="primary" fill="outline" (click)="dismiss()">Fermer</ion-button>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+</ion-content>

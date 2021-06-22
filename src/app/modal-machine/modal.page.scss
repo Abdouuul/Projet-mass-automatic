@@ -1,0 +1,22 @@
+
+
+
+.flex {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.img-box {
+  height: 200px;
+  overflow: hidden;
+}
+
+.img {
+  width: 46%;
+  margin: 7px;
+}
+
+.my-custom-class .action-sheet-group {
+  background: #e5e5e5;
+}
