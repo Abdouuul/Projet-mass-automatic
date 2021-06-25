@@ -7,7 +7,7 @@
 </ion-header>
 
   <ion-content [fullscreen]="true">
-    <form [formGroup]="AjoutMachine" (ngSubmit)="submit()">
+    <form [formGroup]="AjoutMachine">
       <ion-card>
         <ion-card-content>
           <ion-list>
@@ -47,7 +47,7 @@
             </ion-item>
 
             <ion-item>
-              <ion-label position="stacked" style="ont-size: 1.2em">Problèmes</ion-label>
+              <ion-label position="stacked" style="font-size: 1.2em">Problèmes</ion-label>
               <ion-textarea formControlName="problem" name="problem" placeholder="ex: CPU ne fonctionne pas">
               </ion-textarea>
             </ion-item>

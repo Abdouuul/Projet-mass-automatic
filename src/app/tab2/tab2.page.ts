@@ -9,7 +9,6 @@ import {
   ActionSheetController
 } from '@ionic/angular';
 import {Machine} from "../models/machines.model";
-import firebase from "firebase";
 import {Camera, CameraOptions} from "@ionic-native/camera/ngx";
 import {AngularFireStorage} from "@angular/fire/storage";
 import {AngularFireDatabase} from "@angular/fire/database";
@@ -23,6 +22,7 @@ export class Tab2Page {
   machine = {} as Machine;
   imagePath;
   image;
+  new_machine_id;
   machine_send;
   upload: any;
   del: any;
@@ -80,24 +80,25 @@ export class Tab2Page {
   }
 
   async submit() {
-
       this.machine = this.convert(this.AjoutMachine.value);
       let loader = await this.loadingCtrl.create({
         message: "Please wait..."
       });
       await loader.present();
-
       try {
-        await this.firestore.collection("machines").add(this.machine);
-      } catch (e) {
+        await this.firestore.collection("machines").add(this.machine)
+          .then(machineRef =>{
+            console.log('Submit : then: Doc ID affecte a machine_send = '+machineRef.id);
+            this.machine_send = machineRef.id;
+            console.log('submit : then: machine_send.id = '+this.machine_send);
+          })
+
+      }catch (e) {
         this.showToast(e);
+        return 0;
       }
-      this.AjoutMachine.reset();
-
       await loader.dismiss();
-
-      await this.navCtrl.navigateRoot('home');
-
+      return 1;
     }
 
   async addPhoto(source: string) {
@@ -113,6 +114,31 @@ export class Tab2Page {
       console.log("addPhoto : this.image.id = " + this.image.id);
     }
     await this.presentAlertConfirm();
+  }
+
+  async uploadFirebase() {
+   if(await this.submit()){
+     const loading = await this.loadingCtrl.create();
+     await loading.present();
+     this.imagePath = 'MachinesProfilePics'+'/' +this.machine_send;
+     console.log('image path = '+this.imagePath);
+     this.upload = this.afSG.ref(this.imagePath).putString(this.image, 'data_url');
+     console.log('this.upload = '+this.upload);
+     this.upload.then(async () => {
+       await loading.dismiss();
+       const alert = await this.alertCtrl.create({
+         header: 'Upload réussi !',
+         message: 'La machines a bien été ajouté!',
+         buttons: ['OK']
+       });
+       await alert.present();
+       await this.getMachineProfilePicture(this.machine_send);
+       this.AjoutMachine.reset();
+       console.log('AjoutMachine reset !')
+       await this.navCtrl.navigateRoot('home');
+     });
+   }
+
   }
 
   async openCamera() {
@@ -140,36 +166,16 @@ export class Tab2Page {
     };
     return await this.camera.getPicture(options);
   }
-  async uploadFirebase() {
-    const loading = await this.loadingCtrl.create();
-    await loading.present();
-    this.imagePath = this.machine_send.id +'/' + new Date().getTime() + '.jpg';
-    this.upload = this.afSG.ref(this.imagePath).putString(this.image, 'data_url');
 
-    this.upload.then(async () => {
-      await loading.dismiss();
-      const alert = await this.alertCtrl.create({
-        header: 'Upload réussi !',
-        message: 'L\'envoi de la photo dans Firebase est terminé!',
-        buttons: ['OK']
-      });
-      await alert.present();
-    });
+  async getMachineProfilePicture(machineID: string){
+    this.afSG.ref('MachinesProfilePics/'+machineID).getDownloadURL().subscribe(imgurl => {
+      console.log('imgurl: ' + imgurl);
+      this.firestore.doc('machines/' + machineID).update({
+        image_ad: imgurl,
+      })
+    })
   }
-  getImagesStorageMachine(){
-    let storage = firebase.storage();
-    let  listRef = storage.ref().child(this.machine.id);
-    listRef.listAll()
-      .then((res) => {
-        res.items.forEach((itemRef) => {
-          this.afSG.ref(itemRef.fullPath).getDownloadURL().subscribe(imgUrl => {
-            console.log('this.afSG.ref(itemRef.fullPath) : ' , this.afSG.ref(itemRef.fullPath));
-            this.image.push(imgUrl);
-          });
-        })
-        console.log('this.images = ',this.image);
-      });
-  }
+
   async presentActionSheet() {
     const actionSheet = await this.actionSheetCtlr.create({
       header: 'Ajouter une photo',
@@ -201,7 +207,6 @@ export class Tab2Page {
         }]
     });
     await actionSheet.present();
-
     const { role } = await actionSheet.onDidDismiss();
     console.log('onDidDismiss resolved with role', role);
   }
@@ -221,9 +226,8 @@ export class Tab2Page {
           }
         }, {
           text: 'Ajouter',
-          handler: async () => {
+          handler: () => {
             console.log('Confirm Ajouter');
-            await this.submit();
           }
         }
       ]

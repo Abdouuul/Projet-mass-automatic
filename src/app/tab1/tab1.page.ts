@@ -1,18 +1,13 @@
 import { Component } from '@angular/core';
 import {Machine} from "../models/machines.model";
 import {
-  ActionSheetController,
   AlertController,
   LoadingController,
   ModalController,
   ToastController
 } from "@ionic/angular";
 import {AngularFirestore} from "@angular/fire/firestore";
-import firebase from "firebase";
-import {Camera, CameraOptions} from "@ionic-native/camera/ngx";
 import {AngularFireStorage} from "@angular/fire/storage";
-import {AngularFireDatabase} from "@angular/fire/database";
-
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -22,9 +17,8 @@ export class Tab1Page {
   machine = {} as Machine;
   machines: any[];
   machinesBackup: any[];
-
-  image;
-
+  machine_id;
+  downloadURL;
 
 
   constructor(private loadingCtrl: LoadingController,
@@ -33,6 +27,7 @@ export class Tab1Page {
               private firestore: AngularFirestore,
               public afSG: AngularFireStorage,
               public modalController: ModalController) {}
+
   ngOnInit(){
 
   }
@@ -68,34 +63,20 @@ export class Tab1Page {
               model: e.payload.doc.data()['model'],
               dateAte: e.payload.doc.data()['date_atelier'],
               etat: e.payload.doc.data()['etat'],
-
+              docID: e.payload.doc.id,
+              image_ad: e.payload.doc.data()['image_ad'],
             };
           });
+          console.log(this.machines);
           this.machinesBackup = this.machines;
         });
       await loader.dismiss();
     } catch (e) {
       this.showToast(e);
     }
-
   }
 
-  getImagesStorageMachine(){
-    let storage = firebase.storage();
-    let  listRef = storage.ref().child(this.machine.id);
-    listRef.listAll()
-      .then((res) => {
-        res.items.forEach((itemRef) => {
-          this.afSG.ref(itemRef.fullPath).getDownloadURL().subscribe(imgUrl => {
-            console.log('this.afSG.ref(itemRef.fullPath) : ' , this.afSG.ref(itemRef.fullPath));
-            this.image.push(imgUrl);
-          });
-        })
-        console.log('this.images = ',this.image);
-      });
-  }
-
-  filterList(event) {
+    filterList(event) {
     this.machines = this.machinesBackup;
     const searchTerm = event.srcElement.value;
 

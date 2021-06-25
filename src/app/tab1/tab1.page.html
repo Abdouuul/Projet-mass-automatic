@@ -9,7 +9,7 @@
     <ion-item-sliding *ngFor="let machine  of machines" >
       <ion-item>
         <ion-avatar slot="start">
-          <img src="${{this.image}}">
+          <img alt="avatar-img" src="{{machine.image_ad}}">
         </ion-avatar>
         <ion-label>
           <h2>{{machine.type}} - {{machine.fabriquant}}</h2>
