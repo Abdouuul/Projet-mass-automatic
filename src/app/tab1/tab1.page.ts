@@ -3,11 +3,12 @@ import {Machine} from "../models/machines.model";
 import {
   AlertController,
   LoadingController,
-  ModalController,
+  ModalController, NavController,
   ToastController
 } from "@ionic/angular";
 import {AngularFirestore} from "@angular/fire/firestore";
 import {AngularFireStorage} from "@angular/fire/storage";
+import firebase from "firebase";
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -17,8 +18,8 @@ export class Tab1Page {
   machine = {} as Machine;
   machines: any[];
   machinesBackup: any[];
-  machine_id;
-  downloadURL;
+  nbrMachines;
+  result;
 
 
   constructor(private loadingCtrl: LoadingController,
@@ -26,6 +27,7 @@ export class Tab1Page {
               private alertController: AlertController,
               private firestore: AngularFirestore,
               public afSG: AngularFireStorage,
+              private navCtrl: NavController,
               public modalController: ModalController) {}
 
   ngOnInit(){
@@ -68,11 +70,46 @@ export class Tab1Page {
             };
           });
           console.log(this.machines);
+          this.nbrMachines = this.machines.length;
           this.machinesBackup = this.machines;
         });
       await loader.dismiss();
     } catch (e) {
       this.showToast(e);
+    }
+  }
+  async AlertConfirm() {
+    delete this.result;
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Êtes-vous sûr de vouloir supprimer cette machine? ',
+      buttons: [
+        {
+          text: 'Non',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }, {
+          text: 'Oui',
+          role: 'confirm',
+          handler: () => {
+
+          }
+        }
+      ]
+    });
+    await alert.present();
+    return true;
+  }
+
+  async deleteMachine(delMachine) {
+    if( await this.AlertConfirm()){
+      await this.firestore.collection('machines').doc(delMachine.docID).delete();
+      if(delMachine.image_ad != null){
+        await this.afSG.ref('MachinesProfilePics/'+delMachine.docID).delete();
+      }
+      console.log(delMachine);
     }
   }
 
@@ -90,6 +127,10 @@ export class Tab1Page {
           || currentMachine.type.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1)
       }
     });
+  }
+
+  ajouter(){
+    this.navCtrl.navigateRoot('tab2');
   }
 }
 

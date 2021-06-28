@@ -1,8 +1,4 @@
-import firebase from "firebase";
-import Timestamp = firebase.firestore.Timestamp;
-
 export interface Machine{
-  id: string;
   type: string;
   nom: string;
   model: string;

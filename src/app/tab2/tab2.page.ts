@@ -22,12 +22,10 @@ export class Tab2Page {
   machine = {} as Machine;
   imagePath;
   image;
-  new_machine_id;
   machine_send;
   upload: any;
-  del: any;
-  file;
   image_ad:any;
+
   AjoutMachine = this.formBuilder.group({
     type: [''],
     fabriquant: [''],
@@ -57,6 +55,9 @@ export class Tab2Page {
 
   ionViewWillEnter(){
     this.AjoutMachine.reset();
+    if(this.image != null){
+      delete this.image;
+    }
   }
 
   showToast(message: string) {
@@ -88,9 +89,7 @@ export class Tab2Page {
       try {
         await this.firestore.collection("machines").add(this.machine)
           .then(machineRef =>{
-            console.log('Submit : then: Doc ID affecte a machine_send = '+machineRef.id);
             this.machine_send = machineRef.id;
-            console.log('submit : then: machine_send.id = '+this.machine_send);
           })
 
       }catch (e) {
@@ -117,15 +116,15 @@ export class Tab2Page {
   }
 
   async uploadFirebase() {
-   if(await this.submit()){
+   if(await this.submit() && this.image != null){
      const loading = await this.loadingCtrl.create();
      await loading.present();
      this.imagePath = 'MachinesProfilePics'+'/' +this.machine_send;
-     console.log('image path = '+this.imagePath);
      this.upload = this.afSG.ref(this.imagePath).putString(this.image, 'data_url');
-     console.log('this.upload = '+this.upload);
      this.upload.then(async () => {
        await loading.dismiss();
+
+
        const alert = await this.alertCtrl.create({
          header: 'Upload réussi !',
          message: 'La machines a bien été ajouté!',
@@ -134,11 +133,9 @@ export class Tab2Page {
        await alert.present();
        await this.getMachineProfilePicture(this.machine_send);
        this.AjoutMachine.reset();
-       console.log('AjoutMachine reset !')
-       await this.navCtrl.navigateRoot('home');
      });
    }
-
+    await this.navCtrl.navigateRoot('home');
   }
 
   async openCamera() {
@@ -169,7 +166,6 @@ export class Tab2Page {
 
   async getMachineProfilePicture(machineID: string){
     this.afSG.ref('MachinesProfilePics/'+machineID).getDownloadURL().subscribe(imgurl => {
-      console.log('imgurl: ' + imgurl);
       this.firestore.doc('machines/' + machineID).update({
         image_ad: imgurl,
       })
