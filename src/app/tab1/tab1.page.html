@@ -5,15 +5,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header>
+  <ion-header *ngIf="nbrMachines != 0">
     <ion-toolbar>
       <h5 *ngIf="nbrMachines != 0" style="padding-left: 15px">{{this.nbrMachines}} Machines</h5>
     </ion-toolbar>
   </ion-header>
-  <body>
   <ion-list id="dynamicList">
-    <ion-item-sliding *ngFor="let machine  of machines" >
-      <ion-item>
+    <ion-item-sliding *ngFor="let machine  of machines">
+      <ion-item detail (click)="presentModal(machine)">
         <ion-avatar slot="start">
           <img alt="avatar-img" src="{{machine.image_ad}}">
         </ion-avatar>
@@ -25,22 +24,13 @@
         </ion-label>
       </ion-item>
       <ion-item-options side="start">
-        <ion-item-option color="danger" (click)="deleteMachine(machine)">
+        <ion-item-option color="danger" (click)="AlertConfirmDeleteMachine(machine)">
           <ion-icon slot="icon-only" name="trash"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
-
   </ion-list>
-
-  <ion-infinite-scroll threshold="100px">
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      loadingText="Loading more data...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
   <h5 *ngIf="nbrMachines == 0" style="text-align: center"> Vous n'avez pas encore<br>ajouté de machines<br>
     <ion-button color="success" (click)="ajouter()">Ajouter</ion-button></h5>
-  </body>
 </ion-content>
 

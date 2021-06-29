@@ -7,4 +7,7 @@ export interface Machine{
   date_atelier: string;
   prix_achete: string;
   problem: string;
+  nomCl: string;
+  travaillEff: string;
+  typeCl: string;
 }

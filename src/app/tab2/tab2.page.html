@@ -11,59 +11,85 @@
       <ion-card>
         <ion-card-content>
           <ion-list>
-            <ion-item>
-              <ion-label position="stacked" style="font-size: 1.2em">Type Machine</ion-label>
-              <ion-select formControlName="type" placeholder="Type de machine" name="type">
-                <ion-select-option value="Flipper">Flipper</ion-select-option>
-                <ion-select-option value="BabyFoot">Baby Foot</ion-select-option>
-                <ion-select-option value="Jeu de Fléchettes">Jeu de fléchettes</ion-select-option>
-                <ion-select-option value="Borne d'arcade">Borne Arcade</ion-select-option>
-                <ion-select-option value="Juke Boxe">Juke Box</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label position="stacked" style="font-size: 1.2em">Nom Machine</ion-label>
-              <ion-input type="text" placeholder="ex: Flipper DeadPool" name="nom" formControlName="nom" style="font-size: 1.1em"></ion-input>
-            </ion-item>
+            <h1>Information Essentiels : </h1>
+            <ion-item-sliding>
+              <ion-item>
+                <ion-label position="stacked" style="font-size: 1.2em">Type Machine</ion-label>
+                <ion-select formControlName="type" placeholder="Type de machine" name="type">
+                  <ion-select-option value="Flipper">Flipper</ion-select-option>
+                  <ion-select-option value="BabyFoot">Baby Foot</ion-select-option>
+                  <ion-select-option value="Jeu de Fléchettes">Jeu de fléchettes</ion-select-option>
+                  <ion-select-option value="Borne d'arcade">Borne Arcade</ion-select-option>
+                  <ion-select-option value="Juke Boxe">Juke Box</ion-select-option>
+                </ion-select>
+              </ion-item>
 
-            <ion-item>
-              <ion-label position="stacked" style="font-size: 1.2em">Fabriquant</ion-label>
-              <ion-input type="text" placeholder="Stern" formControlName="fabriquant" style="font-size: 1.1em" name="fabriquant"></ion-input>
-            </ion-item>
+              <ion-item>
+                <ion-label position="stacked" style="font-size: 1.2em">Nom Machine</ion-label>
+                <ion-input type="text" placeholder="ex: Flipper DeadPool" name="nom" formControlName="nom" style="font-size: 1.1em"></ion-input>
+              </ion-item>
 
-            <ion-item>
-              <ion-label position="stacked" style="font-size: 1.2em">Model</ion-label>
-              <ion-input type="text" placeholder="ex: 1970" formControlName="model" style="font-size: 1.1em" name="model"></ion-input>
-            </ion-item>
+              <ion-item>
+                <h3>Client</h3>
+                <ion-item>
+                  <ion-select formControlName="typeCl" placeholder="Mr."  name="typeCl">
+                    <ion-select-option value="Mr">Mr.</ion-select-option>
+                    <ion-select-option value="Mme">Mme.</ion-select-option>
+                  </ion-select>
+                </ion-item>
 
-            <ion-item>
-              <ion-label position="stacked" style="font-size: 1.2em">Etat</ion-label>
-              <ion-input type="text" placeholder="Bon etat" name="etat" formControlName="etat" style="font-size: 1.1em"></ion-input>
-            </ion-item>
+                <ion-item>
+                  <ion-input type="text" placeholder="Nom Prénom Client" name="nomCl" formControlName="nomCl" style="font-size: 1.1em"></ion-input>
+                </ion-item>
+              </ion-item>
 
-            <ion-item>
-              <ion-label position="stacked" style="font-size: 1.2em">Prix d'achat</ion-label>
-              <ion-input type="text" placeholder="1200" name="prixachete" formControlName="prixachete" style="font-size: 1.1em"></ion-input>
-            </ion-item>
+              <ion-item>
+                <ion-label position="stacked" style="font-size: 1.2em">Travail Effectué</ion-label>
+                <ion-textarea formControlName="travailEff" name="travailEff" placeholder="Nouvelle cible installé">
+                </ion-textarea>
+              </ion-item>
 
-            <ion-item>
-              <ion-label position="stacked" style="font-size: 1.2em">Problèmes</ion-label>
-              <ion-textarea formControlName="problem" name="problem" placeholder="ex: CPU ne fonctionne pas">
-              </ion-textarea>
-            </ion-item>
+              <h1>Informations Optionnels : </h1>
 
-            <ion-item>
-              <ion-label position="stacked" style="font-size: 1.2em">Date d'arrivée</ion-label>
-              <ion-input type="date" formControlName="dateAte" style="font-size: 1.1em" name="dateAte"></ion-input>
-            </ion-item>
+              <ion-item>
+                <ion-label position="stacked" style="font-size: 1.2em">Fabriquant</ion-label>
+                <ion-input type="text" placeholder="Stern" formControlName="fabriquant" style="font-size: 1.1em" name="fabriquant"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked" style="font-size: 1.2em">Model</ion-label>
+                <ion-input type="number" placeholder="ex: 1970" formControlName="model" style="font-size: 1.1em" name="model"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked" style="font-size: 1.2em">Etat</ion-label>
+                <ion-input type="text" placeholder="Bon etat" name="etat" formControlName="etat" style="font-size: 1.1em"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked" style="font-size: 1.2em">Prix d'achat</ion-label>
+                <ion-input type="number" placeholder="1200" name="prixachete" formControlName="prixachete" style="font-size: 1.1em"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked" style="font-size: 1.2em">Problèmes</ion-label>
+                <ion-textarea formControlName="problem" name="problem" placeholder="ex: CPU ne fonctionne pas">
+                </ion-textarea>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked" style="font-size: 1.2em">Date d'arrivée</ion-label>
+                <ion-input type="date" formControlName="dateAte" style="font-size: 1.1em" name="dateAte"></ion-input>
+              </ion-item>
+
 
               <ion-button expand="block" fill="clear" size="default" (click)="presentActionSheet()"><ion-icon name="camera-outline" style="padding-right: 5px"></ion-icon>Ajouter une photo</ion-button>
 
+              <ion-button expand="block" color="success" type="submit" (click)="uploadFirebase()" style="font-size: 1.5em; margin: 25px">Valider</ion-button>
 
+            </ion-item-sliding>
           </ion-list>
-          <ion-button expand="block" color="success" type="submit" (click)="uploadFirebase()" style="font-size: 1.5em; margin: 25px">Valider</ion-button>
         </ion-card-content>
       </ion-card>
-
     </form>
 </ion-content>

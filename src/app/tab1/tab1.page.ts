@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
 import {Machine} from "../models/machines.model";
-import {
-  AlertController,
-  LoadingController,
-  ModalController, NavController,
-  ToastController
-} from "@ionic/angular";
+import {AlertController, LoadingController, ModalController, NavController, ToastController} from "@ionic/angular";
 import {AngularFirestore} from "@angular/fire/firestore";
 import {AngularFireStorage} from "@angular/fire/storage";
-import firebase from "firebase";
+import {ModalPage} from "../modal-machine/modal.page";
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -18,9 +14,8 @@ export class Tab1Page {
   machine = {} as Machine;
   machines: any[];
   machinesBackup: any[];
+  machine_send;
   nbrMachines;
-  result;
-
 
   constructor(private loadingCtrl: LoadingController,
               private toastCtrl: ToastController,
@@ -42,7 +37,7 @@ export class Tab1Page {
   showToast(message: string) {
     this.toastCtrl.create({
       message: message,
-      duration: 3000
+      duration: 2500
     }).then(toastData => toastData.present());
   }
 
@@ -52,7 +47,6 @@ export class Tab1Page {
     });
     await loader.present();
     try {
-
       this.firestore
         .collection('machines')
         .snapshotChanges()
@@ -69,20 +63,18 @@ export class Tab1Page {
               image_ad: e.payload.doc.data()['image_ad'],
             };
           });
-          console.log(this.machines);
           this.nbrMachines = this.machines.length;
           this.machinesBackup = this.machines;
         });
       await loader.dismiss();
     } catch (e) {
-      this.showToast(e);
+      this.showToast('Erreur d\'affichage des machines');
     }
   }
-  async AlertConfirm() {
-    delete this.result;
+  async AlertConfirmDeleteMachine(delMachine) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Êtes-vous sûr de vouloir supprimer cette machine? ',
+      header: 'Vous-vous supprimer cette machine? ',
       buttons: [
         {
           text: 'Non',
@@ -94,33 +86,36 @@ export class Tab1Page {
           text: 'Oui',
           role: 'confirm',
           handler: () => {
-
+            this.firestore.collection('machines').doc(delMachine.docID).delete();
+            if(delMachine.image_ad != null){
+              this.afSG.ref('MachinesProfilePics/'+delMachine.docID).delete();
+            }
+            this.showToast('Machine Supprimée!');
           }
         }
       ]
     });
     await alert.present();
-    return true;
   }
 
-  async deleteMachine(delMachine) {
-    if( await this.AlertConfirm()){
-      await this.firestore.collection('machines').doc(delMachine.docID).delete();
-      if(delMachine.image_ad != null){
-        await this.afSG.ref('MachinesProfilePics/'+delMachine.docID).delete();
+  async presentModal(machine) {
+    const modal = await this.modalController.create({
+      component: ModalPage,
+      cssClass: 'my-custom-class',
+      componentProps: {
+        machine_send: machine,
       }
-      console.log(delMachine);
-    }
+    });
+    return await modal.present();
   }
 
     filterList(event) {
     this.machines = this.machinesBackup;
-    const searchTerm = event.srcElement.value;
+    const searchTerm = event.target.value;
 
     if (!searchTerm) {
       return;
     }
-
     this.machines = this.machines.filter(currentMachine => {
       if (currentMachine.nom && searchTerm) {
         return (currentMachine.nom.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
@@ -130,7 +125,9 @@ export class Tab1Page {
   }
 
   ajouter(){
-    this.navCtrl.navigateRoot('tab2');
+    this.navCtrl.navigateRoot('tab2').then();
   }
+
+
 }
 

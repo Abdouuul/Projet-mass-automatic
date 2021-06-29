@@ -22,7 +22,7 @@ export class Tab2Page {
   machine = {} as Machine;
   imagePath;
   image;
-  machine_send;
+  machine_id;
   upload: any;
   image_ad:any;
 
@@ -34,7 +34,11 @@ export class Tab2Page {
     prixachete: [''],
     problem: [''],
     dateAte: [''],
-    nom: ['']
+    nom: [''],
+    typeCl:[''],
+    nomCl: [''],
+    travailEff:['']
+
   })
 
   constructor(private formBuilder: FormBuilder,
@@ -76,6 +80,9 @@ export class Tab2Page {
     new_machine.date_atelier = new_form.dateAte;
     new_machine.prix_achete = new_form.prixachete;
     new_machine.problem = new_form.problem;
+    new_machine.nomCl = new_form.nomCl;
+    new_machine.typeCl = new_form.typeCl;
+    new_machine.travaillEff = new_form.travaillEff;
 
     return new_machine;
   }
@@ -89,7 +96,7 @@ export class Tab2Page {
       try {
         await this.firestore.collection("machines").add(this.machine)
           .then(machineRef =>{
-            this.machine_send = machineRef.id;
+            this.machine_id = machineRef.id;
           })
 
       }catch (e) {
@@ -102,15 +109,11 @@ export class Tab2Page {
 
   async addPhoto(source: string) {
     if (source === 'library') {
-      console.log('library');
       const libraryImage = await this.openLibrary();
       this.image = 'data:image/jpg;base64,' + libraryImage;
-      console.log("addPhoto : this.image.id = " + this.image.id);
     } else {
-      console.log('camera');
       const cameraImage = await this.openCamera();
       this.image = 'data:image/jpg;base64,' + cameraImage;
-      console.log("addPhoto : this.image.id = " + this.image.id);
     }
     await this.presentAlertConfirm();
   }
@@ -119,7 +122,7 @@ export class Tab2Page {
    if(await this.submit() && this.image != null){
      const loading = await this.loadingCtrl.create();
      await loading.present();
-     this.imagePath = 'MachinesProfilePics'+'/' +this.machine_send;
+     this.imagePath = 'MachinesProfilePics'+'/' +this.machine_id;
      this.upload = this.afSG.ref(this.imagePath).putString(this.image, 'data_url');
      this.upload.then(async () => {
        await loading.dismiss();
@@ -127,11 +130,11 @@ export class Tab2Page {
 
        const alert = await this.alertCtrl.create({
          header: 'Upload réussi !',
-         message: 'La machines a bien été ajouté!',
+         message: 'La machine a bien été ajouté!',
          buttons: ['OK']
        });
        await alert.present();
-       await this.getMachineProfilePicture(this.machine_send);
+       await this.getMachineProfilePicture(this.machine_id);
        this.AjoutMachine.reset();
      });
    }
