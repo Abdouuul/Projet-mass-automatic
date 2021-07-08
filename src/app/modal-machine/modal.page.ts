@@ -37,5 +37,8 @@ machine_send;
       'dismissed': true
     });
   }
+  modifier(machine){
+
+  }
 
 }

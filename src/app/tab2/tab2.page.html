@@ -8,9 +8,7 @@
 
   <ion-content [fullscreen]="true">
     <form [formGroup]="AjoutMachine">
-      <ion-card>
-        <ion-card-content>
-          <ion-list>
+          <ion-card>
             <h1>Information Essentiels : </h1>
             <ion-item-sliding>
               <ion-item>
@@ -29,27 +27,31 @@
                 <ion-input type="text" placeholder="ex: Flipper DeadPool" name="nom" formControlName="nom" style="font-size: 1.1em"></ion-input>
               </ion-item>
 
+
               <ion-item>
-                <h3>Client</h3>
-                <ion-item>
-                  <ion-select formControlName="typeCl" placeholder="Mr."  name="typeCl">
-                    <ion-select-option value="Mr">Mr.</ion-select-option>
-                    <ion-select-option value="Mme">Mme.</ion-select-option>
+                <ion-label>Client</ion-label>
+               </ion-item>
+              <ion-item>
+                  <ion-select formControlName="prefCl" placeholder="Mr."  name="prefCl">
+                    <ion-select-option value="Mr ">Mr.</ion-select-option>
+                    <ion-select-option value="Mme ">Mme.</ion-select-option>
                   </ion-select>
-                </ion-item>
+              </ion-item>
 
                 <ion-item>
                   <ion-input type="text" placeholder="Nom Prénom Client" name="nomCl" formControlName="nomCl" style="font-size: 1.1em"></ion-input>
                 </ion-item>
-              </ion-item>
+
 
               <ion-item>
                 <ion-label position="stacked" style="font-size: 1.2em">Travail Effectué</ion-label>
-                <ion-textarea formControlName="travailEff" name="travailEff" placeholder="Nouvelle cible installé">
-                </ion-textarea>
+                <ion-textarea formControlName="travaillEff" name="travaillEff" placeholder="Nouvelle cible installé"></ion-textarea>
               </ion-item>
-
-              <h1>Informations Optionnels : </h1>
+            </ion-item-sliding>
+          </ion-card>
+          <ion-card>
+                <ion-item-sliding>
+                <h1>Informations Optionnels : </h1>
 
               <ion-item>
                 <ion-label position="stacked" style="font-size: 1.2em">Fabriquant</ion-label>
@@ -63,7 +65,12 @@
 
               <ion-item>
                 <ion-label position="stacked" style="font-size: 1.2em">Etat</ion-label>
-                <ion-input type="text" placeholder="Bon etat" name="etat" formControlName="etat" style="font-size: 1.1em"></ion-input>
+                <ion-select formControlName="etat" placeholder="Bon Etat"  name="etat">
+                  <ion-select-option value="Neuf">Neuf</ion-select-option>
+                  <ion-select-option value="Bon Etat">Bon Etat</ion-select-option>
+                  <ion-select-option value="Etat Correct">Etat Correct</ion-select-option>
+                  <ion-select-option value="Bon Etat">Mauvaise Etat</ion-select-option>
+                </ion-select>
               </ion-item>
 
               <ion-item>
@@ -73,13 +80,12 @@
 
               <ion-item>
                 <ion-label position="stacked" style="font-size: 1.2em">Problèmes</ion-label>
-                <ion-textarea formControlName="problem" name="problem" placeholder="ex: CPU ne fonctionne pas">
-                </ion-textarea>
+                <ion-textarea formControlName="problem" name="problem" placeholder="ex: CPU ne fonctionne pas"></ion-textarea>
               </ion-item>
 
               <ion-item>
-                <ion-label position="stacked" style="font-size: 1.2em">Date d'arrivée</ion-label>
-                <ion-input type="date" formControlName="dateAte" style="font-size: 1.1em" name="dateAte"></ion-input>
+                <ion-label position="stacked" style="font-size: 1.2em">Date de prise en charge</ion-label>
+                <ion-input type="date" placeholder="01/02/2021" name="dateAte" formControlName="dateAte" style="font-size: 1.1em"></ion-input>
               </ion-item>
 
 
@@ -88,8 +94,7 @@
               <ion-button expand="block" color="success" type="submit" (click)="uploadFirebase()" style="font-size: 1.5em; margin: 25px">Valider</ion-button>
 
             </ion-item-sliding>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
+          </ion-card>
+
     </form>
 </ion-content>

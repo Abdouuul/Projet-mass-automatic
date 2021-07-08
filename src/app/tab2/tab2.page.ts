@@ -35,9 +35,9 @@ export class Tab2Page {
     problem: [''],
     dateAte: [''],
     nom: [''],
-    typeCl:[''],
+    prefCl:[''],
     nomCl: [''],
-    travailEff:['']
+    travaillEff:['']
 
   })
 
@@ -81,8 +81,9 @@ export class Tab2Page {
     new_machine.prix_achete = new_form.prixachete;
     new_machine.problem = new_form.problem;
     new_machine.nomCl = new_form.nomCl;
-    new_machine.typeCl = new_form.typeCl;
+    new_machine.prefCl = new_form.prefCl;
     new_machine.travaillEff = new_form.travaillEff;
+    new_machine.dateAjout = new Date().toDateString();
 
     return new_machine;
   }
@@ -122,7 +123,7 @@ export class Tab2Page {
    if(await this.submit() && this.image != null){
      const loading = await this.loadingCtrl.create();
      await loading.present();
-     this.imagePath = 'MachinesProfilePics'+'/' +this.machine_id;
+     this.imagePath = 'MachinesProfilePics'+'/' +this.machine_id+'.jpg';
      this.upload = this.afSG.ref(this.imagePath).putString(this.image, 'data_url');
      this.upload.then(async () => {
        await loading.dismiss();
@@ -143,10 +144,11 @@ export class Tab2Page {
 
   async openCamera() {
     const options: CameraOptions = {
-      quality: 100,
+      quality: 60,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
+      correctOrientation:true,
       targetWidth: 1000,
       targetHeight: 1000,
       sourceType: this.camera.PictureSourceType.CAMERA
@@ -159,6 +161,7 @@ export class Tab2Page {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
+      correctOrientation:true,
       mediaType: this.camera.MediaType.PICTURE,
       targetWidth: 1000,
       targetHeight: 1000,
@@ -168,7 +171,7 @@ export class Tab2Page {
   }
 
   async getMachineProfilePicture(machineID: string){
-    this.afSG.ref('MachinesProfilePics/'+machineID).getDownloadURL().subscribe(imgurl => {
+    this.afSG.ref('MachinesProfilePics/'+machineID+'.jpg').getDownloadURL().subscribe(imgurl => {
       this.firestore.doc('machines/' + machineID).update({
         image_ad: imgurl,
       })

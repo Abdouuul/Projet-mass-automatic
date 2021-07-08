@@ -43,7 +43,7 @@ export class Tab1Page {
 
   async getMachines(): Promise<any> {
     let loader = await this.loadingCtrl.create({
-      message: 'Please wait ...'
+      message: 'Attendez...'
     });
     await loader.present();
     try {
@@ -59,7 +59,13 @@ export class Tab1Page {
               model: e.payload.doc.data()['model'],
               dateAte: e.payload.doc.data()['date_atelier'],
               etat: e.payload.doc.data()['etat'],
+              problem: e.payload.doc.data()['problem'],
+              dateAjout: e.payload.doc.data()['dateAjout'],
+              prefCl: e.payload.doc.data()['prefCl'],
+              nomCl: e.payload.doc.data()['nomCl'],
+              prixachete: e.payload.doc.data()['prix_achete'],
               docID: e.payload.doc.id,
+              travailleff: e.payload.doc.data()['travaillEff'],
               image_ad: e.payload.doc.data()['image_ad'],
             };
           });
@@ -74,7 +80,7 @@ export class Tab1Page {
   async AlertConfirmDeleteMachine(delMachine) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Vous-vous supprimer cette machine? ',
+      header: 'Voulez-vous supprimer cette machine? ',
       buttons: [
         {
           text: 'Non',
@@ -88,7 +94,7 @@ export class Tab1Page {
           handler: () => {
             this.firestore.collection('machines').doc(delMachine.docID).delete();
             if(delMachine.image_ad != null){
-              this.afSG.ref('MachinesProfilePics/'+delMachine.docID).delete();
+              this.afSG.ref('MachinesProfilePics/'+delMachine.docID+'.jpg').delete();
             }
             this.showToast('Machine Supprimée!');
           }
@@ -109,23 +115,32 @@ export class Tab1Page {
     return await modal.present();
   }
 
-    filterList(event) {
+  filterList(event) {
     this.machines = this.machinesBackup;
     const searchTerm = event.target.value;
-
     if (!searchTerm) {
       return;
     }
     this.machines = this.machines.filter(currentMachine => {
-      if (currentMachine.nom && searchTerm) {
-        return (currentMachine.nom.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-          || currentMachine.type.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1)
+      if(currentMachine.nom && currentMachine.nomCl && searchTerm){
+        return (currentMachine.nom.toLowerCase().indexOf(searchTerm.toLowerCase())> -1 ||
+        currentMachine.nomCl.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1)
+      }else{
+        return (currentMachine.nom.toLowerCase().indexOf(searchTerm.toLowerCase())> -1)
       }
     });
   }
 
   ajouter(){
     this.navCtrl.navigateRoot('tab2').then();
+  }
+
+  doRefresh(event) {
+    this.getMachines().then();
+
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
   }
 
 

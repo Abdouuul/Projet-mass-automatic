@@ -3,40 +3,63 @@
   <ion-list lines="none">
 
     <ion-card>
-      <img src="{{this.machine_send.image_ad}}" />
+      <img [hidden]="this.machine_send.image_ad == null" alt="machine-image" src="{{this.machine_send.image_ad}}" />
       <ion-card-header>
-        <ion-card-subtitle> </ion-card-subtitle>
-        <ion-card-title> </ion-card-title>
+        <ion-card-subtitle>Ajouté le {{this.machine_send.dateAjout}}  </ion-card-subtitle>
+        <ion-card-title>{{this.machine_send.nom}}</ion-card-title>
       </ion-card-header>
 
-      <ion-item>
+      <ion-item [hidden]="this.machine_send.type == null">
         <ion-icon name="game-controller-outline" slot="start"></ion-icon>
-        <ion-label></ion-label>
+        <ion-label>{{this.machine_send.type}}</ion-label>
       </ion-item>
 
-      <ion-item>
-        <ion-icon name="pin" slot="start"></ion-icon>
-        <ion-label> </ion-label>
+      <ion-item [hidden]="this.machine_send.nomCl == null">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-label>{{this.machine_send.prefCl}} {{this.machine_send.nomCl}}</ion-label>
       </ion-item>
 
-      <ion-item>
+      <ion-item [hidden]="this.machine_send.dateAte == null">
         <ion-icon name="calendar" slot="start"></ion-icon>
-        <ion-label> </ion-label>
+        <ion-label>En Atelier depuis le {{this.machine_send.dateAte}}</ion-label>
+      </ion-item>
+
+      <ion-item [hidden]="this.machine_send.etat == null">
+        <ion-icon name="cog-outline" slot="start"></ion-icon>
+        <ion-label>Etat : {{this.machine_send.etat}}</ion-label>
       </ion-item>
     </ion-card>
 
-    <ion-card >
+    <ion-card [hidden]="this.machine_send.travailleff == null">
       <ion-card-content>
         <ion-card-title>
-          Description
+          Travail effectué
         </ion-card-title>
-        <p>
+        <p style="white-space: pre-wrap">{{this.machine_send.travailleff}}</p>
+      </ion-card-content>
+    </ion-card>
 
-        </p>
+    <ion-card [hidden]="this.machine_send.problem == null">
+      <ion-card-content>
+        <ion-card-title>Problèmes
+        </ion-card-title>
+        <h2>{{this.machine_send.problem}}</h2>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card [hidden]="this.machine_send.model == null && this.machine_send.prix_achete == null">
+      <ion-card-content>
+        <ion-card-title>
+          Autres Informations
+        </ion-card-title>
+        <ul>
+          <li>Model : {{this.machine_send.model}}</li>
+          <li>Prix d'achat : {{this.machine_send.prixachete}}€</li>
+        </ul>
       </ion-card-content>
     </ion-card>
   </ion-list>
-
-  <ion-button expand="block" color="primary" fill="outline" (click)="dismiss()">Fermer</ion-button>
+  <ion-button expand="block" color="primary" fill="outline" (click)="modifier(this.machine_send)">Modifier</ion-button>
+  <ion-button expand="block" color="danger" fill="outline" (click)="dismiss()">Fermer</ion-button>
 
 </ion-content>

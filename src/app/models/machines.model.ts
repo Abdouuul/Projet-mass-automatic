@@ -9,5 +9,6 @@ export interface Machine{
   problem: string;
   nomCl: string;
   travaillEff: string;
-  typeCl: string;
+  prefCl: string;
+  dateAjout: string;
 }

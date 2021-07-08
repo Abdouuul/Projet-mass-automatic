@@ -4,20 +4,24 @@
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content [fullscreen]="true">
   <ion-header *ngIf="nbrMachines != 0">
     <ion-toolbar>
       <h5 *ngIf="nbrMachines != 0" style="padding-left: 15px">{{this.nbrMachines}} Machines</h5>
     </ion-toolbar>
   </ion-header>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
   <ion-list id="dynamicList">
     <ion-item-sliding *ngFor="let machine  of machines">
       <ion-item detail (click)="presentModal(machine)">
         <ion-avatar slot="start">
-          <img alt="avatar-img" src="{{machine.image_ad}}">
+          <img *ngIf="machine.image_ad != null" alt="avatar-img" src="{{machine.image_ad}}">
         </ion-avatar>
         <ion-label>
-          <h2>{{machine.type}} - {{machine.fabriquant}}</h2>
+          <h2>{{machine.type}} - {{machine.nomCl}}</h2>
           <h3>{{machine.nom}}</h3>
           <p>{{machine.dateAte}}</p>
           <h3>{{machine.etat}}</h3>
@@ -26,6 +30,9 @@
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)="AlertConfirmDeleteMachine(machine)">
           <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="primary">
+          <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
