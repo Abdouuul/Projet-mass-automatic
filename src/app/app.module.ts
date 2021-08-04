@@ -9,10 +9,11 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {Camera, CameraOptions} from "@ionic-native/camera/ngx";
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {environment} from "../environments/environment";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +22,8 @@ import {environment} from "../environments/environment";
     AngularFireModule.initializeApp(environment.FIREBASE_CONFIG),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    AngularFireStorageModule,],
+    AngularFireStorageModule,
+    FormsModule, ReactiveFormsModule],
   providers: [
     StatusBar,
     SplashScreen,

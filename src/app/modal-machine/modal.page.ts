@@ -6,6 +6,7 @@ import {AngularFireDatabase} from "@angular/fire/database";
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ActionSheetController } from '@ionic/angular';
+import {ModalModifPage} from "../modal-modif/modal-modif.page";
 
 @Component({
   selector: 'app-modal',
@@ -17,7 +18,7 @@ import { ActionSheetController } from '@ionic/angular';
   imports:[ CommonModule ],
 })
 
-export class ModalPage implements OnInit {
+export class ModalPageDetail implements OnInit {
 machine_send;
   constructor(
     public modalController: ModalController,
@@ -32,8 +33,21 @@ machine_send;
   ngOnInit() {
   }
 
-  dismiss() {
-    this.modalController.dismiss({
+  async presentModal(machine) {
+    await this.dismiss();
+    const modal = await this.modalController.create({
+      component: ModalModifPage,
+      cssClass: 'my-custom-class',
+      componentProps: {
+        machine_send: machine,
+      }
+    });
+    return await modal.present();
+  }
+
+
+  async dismiss() {
+    await this.modalController.dismiss({
       'dismissed': true
     });
   }

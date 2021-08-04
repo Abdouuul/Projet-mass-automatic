@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {AngularFirestore} from "@angular/fire/firestore";
 import {FormBuilder} from '@angular/forms';
+
 import {
   LoadingController,
   NavController,
@@ -127,6 +128,7 @@ export class Tab2Page {
      this.upload = this.afSG.ref(this.imagePath).putString(this.image, 'data_url');
      this.upload.then(async () => {
        await loading.dismiss();
+
 
 
        const alert = await this.alertCtrl.create({

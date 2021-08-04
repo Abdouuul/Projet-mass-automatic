@@ -13,8 +13,11 @@ const routes: Routes = [
   {
     path:'tab2',
     loadChildren: () => import('./tab2/tab2.module').then(m => m.Tab2PageModule),
-  }
-
+  },
+  {
+    path: 'modal-modif',
+    loadChildren: () => import('./modal-modif/modal-modif.module').then( m => m.ModalModifPageModule)
+  },
 ];
 @NgModule({
   imports: [

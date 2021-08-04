@@ -3,7 +3,7 @@ import {Machine} from "../models/machines.model";
 import {AlertController, LoadingController, ModalController, NavController, ToastController} from "@ionic/angular";
 import {AngularFirestore} from "@angular/fire/firestore";
 import {AngularFireStorage} from "@angular/fire/storage";
-import {ModalPage} from "../modal-machine/modal.page";
+import {ModalPageDetail} from "../modal-machine/modal.page";
 
 @Component({
   selector: 'app-tab1',
@@ -51,7 +51,7 @@ export class Tab1Page {
         .collection('machines')
         .snapshotChanges()
         .subscribe(data => {
-          this.machines = data.map(e => {
+          this.machines = data.map( e => {
             return {
               type: e.payload.doc.data()['type'],
               fabriquant: e.payload.doc.data()['fabriquant'],
@@ -69,6 +69,7 @@ export class Tab1Page {
               image_ad: e.payload.doc.data()['image_ad'],
             };
           });
+
           this.nbrMachines = this.machines.length;
           this.machinesBackup = this.machines;
         });
@@ -106,7 +107,7 @@ export class Tab1Page {
 
   async presentModal(machine) {
     const modal = await this.modalController.create({
-      component: ModalPage,
+      component: ModalPageDetail,
       cssClass: 'my-custom-class',
       componentProps: {
         machine_send: machine,

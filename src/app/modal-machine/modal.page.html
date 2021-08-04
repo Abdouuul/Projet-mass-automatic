@@ -2,8 +2,9 @@
 
   <ion-list lines="none">
 
+
     <ion-card>
-      <img [hidden]="this.machine_send.image_ad == null" alt="machine-image" src="{{this.machine_send.image_ad}}" />
+      <img [hidden]="this.machine_send.image_ad == null " alt="machine-image" src="{{this.machine_send.image_ad}}" />
       <ion-card-header>
         <ion-card-subtitle>Ajouté le {{this.machine_send.dateAjout}}  </ion-card-subtitle>
         <ion-card-title>{{this.machine_send.nom}}</ion-card-title>
@@ -53,13 +54,13 @@
           Autres Informations
         </ion-card-title>
         <ul>
-          <li>Model : {{this.machine_send.model}}</li>
-          <li>Prix d'achat : {{this.machine_send.prixachete}}€</li>
+          <li [hidden]="this.machine_send.model == null">Model : {{this.machine_send.model}}</li>
+          <li [hidden]="this.machine_send.prix_achete == null">Prix d'achat : {{this.machine_send.prixachete}}€</li>
         </ul>
       </ion-card-content>
     </ion-card>
   </ion-list>
-  <ion-button expand="block" color="primary" fill="outline" (click)="modifier(this.machine_send)">Modifier</ion-button>
+  <ion-button expand="block" color="primary" fill="outline" (click)="presentModal(this.machine_send)">Modifier</ion-button>
   <ion-button expand="block" color="danger" fill="outline" (click)="dismiss()">Fermer</ion-button>
 
 </ion-content>
