@@ -15,23 +15,23 @@
         <ion-label>{{this.machine_send.type}}</ion-label>
       </ion-item>
 
-      <ion-item [hidden]="this.machine_send.nomCl == null">
+      <ion-item [hidden]='this.machine_send.nomCl == null || this.machine_send.nomCl == ""'>
         <ion-icon name="person-outline" slot="start"></ion-icon>
         <ion-label>{{this.machine_send.prefCl}} {{this.machine_send.nomCl}}</ion-label>
       </ion-item>
 
-      <ion-item [hidden]="this.machine_send.dateAte == null">
+      <ion-item [hidden]='this.machine_send.dateAte == null || this.machine_send.dateAte == "" '>
         <ion-icon name="calendar" slot="start"></ion-icon>
         <ion-label>En Atelier depuis le {{this.machine_send.dateAte}}</ion-label>
       </ion-item>
 
-      <ion-item [hidden]="this.machine_send.etat == null">
+      <ion-item [hidden]='this.machine_send.etat == null || this.machine_send.etat =="" '>
         <ion-icon name="cog-outline" slot="start"></ion-icon>
         <ion-label>Etat : {{this.machine_send.etat}}</ion-label>
       </ion-item>
     </ion-card>
 
-    <ion-card [hidden]="this.machine_send.travailleff == null">
+    <ion-card [hidden]='this.machine_send.travailleff == null || this.machine_send.travailleff == ""'>
       <ion-card-content>
         <ion-card-title>
           Travail effectué
@@ -40,7 +40,7 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card [hidden]="this.machine_send.problem == null">
+    <ion-card [hidden]='this.machine_send.problem == null || this.machine_send.problem == ""'>
       <ion-card-content>
         <ion-card-title>Problèmes
         </ion-card-title>
@@ -55,12 +55,12 @@
         </ion-card-title>
         <ul>
           <li [hidden]="this.machine_send.model == null">Model : {{this.machine_send.model}}</li>
-          <li [hidden]="this.machine_send.prix_achete == null">Prix d'achat : {{this.machine_send.prixachete}}€</li>
+          <li [hidden]="this.machine_send.prixachete == null">Prix d'achat : {{this.machine_send.prixachete}}€</li>
         </ul>
       </ion-card-content>
     </ion-card>
   </ion-list>
-  <ion-button expand="block" color="primary" fill="outline" (click)="presentModal(this.machine_send)">Modifier</ion-button>
+  <ion-button [hidden]="this.archived==true" expand="block" color="primary" fill="outline" (click)="presentModal(this.machine_send)">Modifier</ion-button>
   <ion-button expand="block" color="danger" fill="outline" (click)="dismiss()">Fermer</ion-button>
 
 </ion-content>

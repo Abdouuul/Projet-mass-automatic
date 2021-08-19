@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {AngularFirestore} from "@angular/fire/firestore";
 import {FormBuilder} from '@angular/forms';
+import {FileSystem} from "@angular/compiler-cli/src/ngtsc/file_system";
 
 import {
   LoadingController,
@@ -25,7 +26,6 @@ export class Tab2Page {
   image;
   machine_id;
   upload: any;
-  image_ad:any;
 
   AjoutMachine = this.formBuilder.group({
     type: [''],
@@ -84,7 +84,7 @@ export class Tab2Page {
     new_machine.nomCl = new_form.nomCl;
     new_machine.prefCl = new_form.prefCl;
     new_machine.travaillEff = new_form.travaillEff;
-    new_machine.dateAjout = new Date().toDateString();
+    new_machine.dateAjout = new Date().toLocaleString();
 
     return new_machine;
   }
@@ -174,9 +174,11 @@ export class Tab2Page {
 
   async getMachineProfilePicture(machineID: string){
     this.afSG.ref('MachinesProfilePics/'+machineID+'.jpg').getDownloadURL().subscribe(imgurl => {
-      this.firestore.doc('machines/' + machineID).update({
-        image_ad: imgurl,
-      })
+      if (this.image != null && typeof imgurl != "undefined"){
+        this.firestore.doc('machines/' + machineID).update({
+          image_ad:imgurl,
+        })
+      }
     })
   }
 

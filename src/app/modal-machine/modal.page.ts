@@ -18,8 +18,9 @@ import {ModalModifPage} from "../modal-modif/modal-modif.page";
   imports:[ CommonModule ],
 })
 
-export class ModalPageDetail implements OnInit {
-machine_send;
+export class ModalPage implements OnInit {
+  machine_send;
+  archived: boolean;
   constructor(
     public modalController: ModalController,
     public loadingController: LoadingController,

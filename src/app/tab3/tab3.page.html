@@ -1,21 +1,31 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="secondary">
-    <ion-item color="secondary">
-      <ion-searchbar></ion-searchbar>
-    </ion-item>
+  <ion-toolbar>
+    <ion-searchbar style="padding-top: 5px" slot="start" color="primary" (ionInput)="filterList($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-  </ion-header>
-  <ion-item-divider>
-    <ion-item>
-      <p>Nbr Clients</p>
-    </ion-item>
-    <ion-item>
-      <ion-button><ion-icon name="person-add-outline"></ion-icon></ion-button>
-    </ion-item>
-  </ion-item-divider>
 
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list id="dynamicList">
+    <ion-item-sliding *ngFor="let archive  of archives">
+      <ion-item detail (click)="presentModal(archive)">
+        <ion-avatar slot="start">
+          <img *ngIf="archive.image_ad != null" alt="avatar-img" src="{{archive.image_ad}}">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{archive.type}}</h2><h2 [hidden]='this.archive.nomCl == null || this.archive.nomCl == ""'>{{archive.nomCl}}</h2>
+          <h3>{{archive.nom}}</h3>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="start">
+        <ion-item-option color="danger" (click)="AlertConfirmDeleteMachine(archive)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <h5 *ngIf="nbrArchives == 0" style="text-align: center">Votre Archive est vide</h5>
 </ion-content>
