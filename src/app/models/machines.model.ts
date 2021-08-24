@@ -11,4 +11,5 @@ export interface Machine{
   travaillEff: string;
   prefCl: string;
   dateAjout: string;
+  image_ID: string;
 }

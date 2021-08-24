@@ -52,8 +52,4 @@ export class ModalPage implements OnInit {
       'dismissed': true
     });
   }
-  modifier(machine){
-
-  }
-
 }

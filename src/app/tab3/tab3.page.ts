@@ -58,6 +58,7 @@ nbrArchives;
               docID: e.payload.doc.id,
               travailleff: e.payload.doc.data()['travaillEff'],
               image_ad: e.payload.doc.data()['image_ad'],
+              image_ID: e.payload.doc.data()['image_ID']
             };
           });
 
@@ -121,6 +122,9 @@ nbrArchives;
           role: 'confirm',
           handler: () => {
             this.firestore.collection('archives').doc(delArchive.docID).delete();
+            if(delArchive.image_ad != null){
+              this.afSG.ref('MachinesProfilePics/'+delArchive.image_ID+'.jpg').delete();
+            }
             this.showToast('Machine supprimée de l\'archive!');
           }
         }

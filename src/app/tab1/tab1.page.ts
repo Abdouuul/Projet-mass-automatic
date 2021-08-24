@@ -189,11 +189,26 @@ export class Tab1Page {
 
 
   archiver(machine){
+    this.firestore.collection('machines').doc(machine.docID).delete();
     if(machine.image_ad != undefined){
-      this.firestore.collection("archives").add(machine);
+      this.firestore.collection("archives").add({
+        image_ID: machine.docID,
+        type: machine.type,
+        fabriquant: machine.fabriquant,
+        model: machine.model,
+        etat: machine.etat,
+        nom: machine.nom,
+        nomCl: machine.nomCl,
+        prefCl: machine.prefCl,
+        prix_achete: machine.prixachete,
+        problem: machine.problem,
+        travaillEff: machine.travailleff,
+        image_ad: machine.image_ad
+      });
       this.showToast('Machine Archivée!');
     }else{
       this.firestore.collection("archives").add({
+        image_ID: machine.docID,
         type: machine.type,
         fabriquant: machine.fabriquant,
         model: machine.model,
@@ -206,6 +221,7 @@ export class Tab1Page {
         travaillEff: machine.travailleff,
         image_ad: null
       });
+
       this.showToast('Machine Archivée!');
     }
   }

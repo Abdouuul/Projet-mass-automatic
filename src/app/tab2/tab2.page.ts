@@ -83,6 +83,7 @@ export class Tab2Page {
     new_machine.nomCl = new_form.nomCl;
     new_machine.prefCl = new_form.prefCl;
     new_machine.travaillEff = new_form.travaillEff;
+    new_machine.image_ID = null;
     new_machine.dateAjout = new Date().toLocaleString();
 
     return new_machine;
@@ -176,6 +177,7 @@ export class Tab2Page {
       if (this.image != null && typeof imgurl != "undefined"){
         this.firestore.doc('machines/' + machineID).update({
           image_ad:imgurl,
+          image_ID:machineID,
         })
       }
     })
