@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{this.machine_send.type}} {{this.machine_send.nom}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <form [formGroup]="ModifMachine">
+    <ion-card>
+      <h1>Information Essentiels : </h1>
+      <ion-item-sliding>
+        <ion-item>
+          <ion-label position="stacked" style="font-size: 1.2em">Type Machine</ion-label>
+          <ion-select formControlName="type" [ngModel]="this.machine_send.type" name="type">
+            <ion-select-option value="Flipper">Flipper</ion-select-option>
+            <ion-select-option value="BabyFoot">Baby Foot</ion-select-option>
+            <ion-select-option value="Jeu de Fléchettes">Jeu de fléchettes</ion-select-option>
+            <ion-select-option value="Borne d'arcade">Borne Arcade</ion-select-option>
+            <ion-select-option value="Juke Box">Juke Box</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked" style="font-size: 1.2em">Nom Machine</ion-label>
+          <ion-input type="text" [ngModel]="this.machine_send.nom" name="nom" formControlName="nom" style="font-size: 1.1em"></ion-input>
+        </ion-item>
+
+
+        <ion-item>
+          <ion-label>Client</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-select formControlName="prefCl" [ngModel]="this.machine_send.prefCl"  name="prefCl">
+            <ion-select-option value="Mr ">Mr.</ion-select-option>
+            <ion-select-option value="Mme ">Mme.</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-input type="text" [ngModel]="this.machine_send.nomCl" name="nomCl" formControlName="nomCl" style="font-size: 1.1em"></ion-input>
+        </ion-item>
+
+
+        <ion-item>
+          <ion-label position="stacked" style="font-size: 1.2em">Travail Effectué</ion-label>
+          <ion-textarea formControlName="travaillEff" name="travaillEff" [ngModel]="this.machine_send.travailleff" ></ion-textarea>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-card>
+    <ion-card>
+      <ion-item-sliding>
+        <h1>Informations Optionnels : </h1>
+
+        <ion-item>
+          <ion-label position="stacked" style="font-size: 1.2em">Fabriquant</ion-label>
+          <ion-input type="text" placeholder="" [ngModel]="this.machine_send.fabriquant" formControlName="fabriquant" style="font-size: 1.1em" name="fabriquant"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked" style="font-size: 1.2em">Model</ion-label>
+          <ion-input type="number" [ngModel]="this.machine_send.model" formControlName="model" style="font-size: 1.1em" name="model"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked" style="font-size: 1.2em">Etat</ion-label>
+          <ion-select formControlName="etat" [ngModel]="this.machine_send.etat" name="etat">
+            <ion-select-option value="Neuf">Neuf</ion-select-option>
+            <ion-select-option value="Bon Etat">Bon Etat</ion-select-option>
+            <ion-select-option value="Etat Correct">Etat Correct</ion-select-option>
+            <ion-select-option value="Mauvaise Etat">Mauvaise Etat</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked" style="font-size: 1.2em">Prix d'achat</ion-label>
+          <ion-input type="number" [ngModel]="this.machine_send.prixachete" name="prixachete" formControlName="prixachete" style="font-size: 1.1em"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked" style="font-size: 1.2em">Problèmes</ion-label>
+          <ion-textarea formControlName="problem" name="problem" [ngModel]="this.machine_send.problem"></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked" style="font-size: 1.2em">Date de prise en charge</ion-label>
+          <ion-input type="date" placeholder="" [ngModel]="this.machine_send.dateAte" name="dateAte" formControlName="dateAte" style="font-size: 1.1em"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="success" fill="outline" style="font-size: 1.5em; margin: 25px" (click)="modifier(this.machine_send)">Enregistrer</ion-button>
+        <ion-button expand="block" color="danger"  fill="outline" (click)="dismiss()">Retour</ion-button>
+      </ion-item-sliding>
+    </ion-card>
+  </form>
+</ion-content>

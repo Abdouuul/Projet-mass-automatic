@@ -6,7 +6,7 @@ import {AngularFireDatabase} from "@angular/fire/database";
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ActionSheetController } from '@ionic/angular';
-import {ModalModifPage} from "../modal-modif/modal-modif.page";
+import {ModalModificationPage} from "../modal-modification/modal-modification.page";
 
 @Component({
   selector: 'app-modal',
@@ -37,7 +37,7 @@ export class ModalPage implements OnInit {
   async presentModal(machine) {
     await this.dismiss();
     const modal = await this.modalController.create({
-      component: ModalModifPage,
+      component: ModalModificationPage,
       cssClass: 'my-custom-class',
       componentProps: {
         machine_send: machine,

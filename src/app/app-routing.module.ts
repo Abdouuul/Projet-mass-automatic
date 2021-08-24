@@ -11,7 +11,6 @@ const routes: Routes = [
     redirectTo: '/login',
     pathMatch: 'full'
   },
-
   {
     path:'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule),
@@ -32,12 +31,12 @@ const routes: Routes = [
     loadChildren: () => import('./tab2/tab2.module').then(m => m.Tab2PageModule),
   },
   {
-    path: 'modal-modif',
-    loadChildren: () => import('./modal-modif/modal-modif.module').then( m => m.ModalModifPageModule)
-  },
-  {
     path: 'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'modal-modification',
+    loadChildren: () => import('./modal-modification/modal-modification.module').then( m => m.ModalModificationPageModule)
   },
 ];
 @NgModule({

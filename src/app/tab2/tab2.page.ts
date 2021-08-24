@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {AngularFirestore} from "@angular/fire/firestore";
 import {FormBuilder} from '@angular/forms';
-import {FileSystem} from "@angular/compiler-cli/src/ngtsc/file_system";
 
 import {
   LoadingController,
