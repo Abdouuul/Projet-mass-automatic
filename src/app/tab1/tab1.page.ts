@@ -230,7 +230,7 @@ export class Tab1Page {
       header: 'Ordre',
       cssClass: 'my-custom-class',
       buttons: [{
-        text: 'Du plus anien au plus récent',
+        text: 'Du plus ancien au plus récent',
         role: 'confirm',
         icon: 'arrow-up',
         handler: () => {
